@@ -5,7 +5,7 @@
   "description": "silvertube's backend",
   "main": "index.js",
   "scripts": {
-    "server": "nodemon src/index.js",
+    "server": "nodemon -r dotenv/config --experimental-json-modules src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -15,9 +15,13 @@
   ],
   "author": "PankajKDev",
   "license": "ISC",
-  "dependencies": {},
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "exxpress": "^1.0.0",
+    "mongoose": "^8.5.1"
+  },
   "devDependencies": {
-    "prettier": "^3.3.3",
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "prettier": "^3.3.3"
   }
 }
