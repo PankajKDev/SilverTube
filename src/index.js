@@ -1,27 +1,24 @@
 import dotenv from "dotenv";
 import connectDB from "./db/index.js";
+import app from "./app.js";
 
 dotenv.config({
   path: "./env",
 });
-connectDB();
+//asynchronous functions returns a promise after completion
+//and try/catch can be used on them here connectDB()
+// is an asynchronous function
+connectDB()
+  .then(() => {
+    app.on("error", (error) => {
+      console.log(`The app ran into an error : ${error}`);
+      throw error;
+    });
 
-// single page approach
-// import express from "exxpress";
-// const app = express()(async () => {
-//   try {
-//     await mongoose.connect(`${process.env.MONGODB_URI}/${DB_NAME}`);
-//     app.on("Error", (error) => {
-//       console.log("The app encountered an error Please try later", error);
-//       throw error;
-//     });
-//     app.listen(process.env.PORT, () => {
-//       console.log(
-//         `App is listening on port http://localhost:${process.env.PORT}`
-//       );
-//     });
-//   } catch (error) {
-//     console.log("Encountered an error :", error);
-//     throw error;
-//   }
-// })();
+    app.listen(process.env.PORT || 8000, () => {
+      console.log(`Server active at http://localhost:${process.env.PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.log("MongoDB connection failed Error: ", error);
+  });
