@@ -27,7 +27,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Please add a valid email address");
   }
 
-  const existedUser = User.findOne({
+  const existedUser = await User.findOne({
     $or: [{ username }, { email }],
     //checks for username and email in database to match
   });
@@ -39,7 +39,7 @@ const registerUser = asyncHandler(async (req, res) => {
   const coverImageLocalPath = req.files?.coverImage[0]?.path;
 
   if (!avatarLocalPath) {
-    throw new ApiError(400, "avatar is required");
+    throw new ApiError(400, "avatar is required...");
   }
 
   const avatar = await uploadOnCloudinary(avatarLocalPath);

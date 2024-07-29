@@ -9,7 +9,7 @@ router.route("/register").post(
       maxCount: 1,
     },
     {
-      name: "CoverImage",
+      name: "coverImage",
       maxCount: 1,
     },
   ]),
