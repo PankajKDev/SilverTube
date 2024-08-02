@@ -242,13 +242,59 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
   const user = User.findByIdAndUpdate(
     req.user?._id,
     {
-      $set: { fullName, email: email },
+      $set: { fullName, email: email }, //setting fields from old to new(destuructured from req.body)
     },
     { new: true }
   ).select("-password");
   return res
     .status(200)
     .json(new ApiResponse(200, user, "Account details updated successfully"));
+});
+
+//updating files
+const updateUserAvatar = asyncHandler(async (req, res) => {
+  const avatarLocalPath = req.file?.path; //file because as single file is being uploaded
+
+  if (!avatarLocalPath) {
+    throw new ApiError(400, "avatar is required to update avatar");
+  }
+  const avatar = await uploadOnCloudinary(avatarLocalPath);
+  if (!avatar.url) {
+    throw new ApiError(400, "Error while uploading avatar");
+  }
+  const user = await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: { avatar: avatar.url }, //avatar is an object so instead of assigning avatar avatar.url is being assigned
+    },
+    { new: true }
+  ).select("-password"); //removing password everytime we call user
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Avatar updated successfully"));
+});
+
+const updateUserCoverImage = asyncHandler(async (req, res) => {
+  const coverImageLocalPath = req.file?.path;
+  if (!coverImageLocalPath) {
+    throw new ApiError(400, "Cover Image is required to update cover image");
+  }
+  const coverImage = await uploadOnCloudinary(coverImageLocalPath);
+  if (!coverImage.url) {
+    throw new ApiError(400, "Error while uploading cover image");
+  }
+  const user = await User.findByIdAndUpdate(
+    req.user?._id,
+    {
+      $set: { coverImage: coverImage.url },
+      //the field coverImage's value is being set to coverImage.url
+    },
+    { new: true }
+  ).select("-password");
+  return res
+    .status(200)
+    .json(new ApiResponse(200, user, "Cover Image updated successfully"));
 });
 export {
   registerUser,
@@ -257,4 +303,7 @@ export {
   refreshAccessToken,
   changeCurrentPassword,
   getCurrentUser,
+  updateAccountDetails,
+  updateUserAvatar,
+  updateUserCoverImage,
 };
