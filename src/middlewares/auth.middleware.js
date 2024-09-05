@@ -2,12 +2,13 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
-export const verifyJWT = asyncHandler(async (req, res, next) => {
+export const verifyJWT = asyncHandler(async (req, _, next) => {
   //   accessing cookies
   try {
     const token =
       req.cookies?.accessToken ||
-      req.header("Authorization").replace("Bearer ", "");
+      req.header("Authorization")?.replace("Bearer ", "");
+      console.log(req.cookies.accessToken)
     // In header method it looks for authorizaion header and Replace Bearer to empty to extract
     //the token
     //   if user is sending a header
