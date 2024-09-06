@@ -4,7 +4,7 @@ import {User} from "../models/user.model.js"
 import {ApiError} from "../utils/ApiError.js"
 import {ApiResponse} from "../utils/ApiResponse.js"
 import {asyncHandler} from "../utils/asyncHandler.js"
-import {uploadOnCloudinary} from "../utils/cloudinary.js"
+import {oldAssetDeleter, uploadOnCloudinary} from "../utils/cloudinary.js"
 
 
 const getAllVideos = asyncHandler(async (req, res) => {
@@ -121,6 +121,9 @@ try{
         throw new ApiError(400,"Invalid videoId  while deleting video")
     }
     const deletedVideo= await Video.findByIdAndDelete(videoId)
+    await oldAssetDeleter(deletedVideo?.videoFile)
+    await oldAssetDeleter(deletedVideo?.thumbnail)
+
     if(!deletedVideo){
         throw new ApiError(400,"Error while deleting video")
     }
