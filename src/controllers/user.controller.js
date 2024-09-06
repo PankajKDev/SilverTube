@@ -1,10 +1,9 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { User } from "../models/user.model.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { oldAssetDeleter, uploadOnCloudinary } from "../utils/cloudinary.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import jwt from "jsonwebtoken";
-import { oldImageDeleter } from "../utils/oldImageDeleter..js";
 import mongoose from "mongoose";
 // we arent doing web request so no need of asyncHandler
 const generateAccessAndRefreshTokens = async function (userId) {
@@ -258,7 +257,7 @@ const updateUserAvatar = asyncHandler(async (req, res) => {
   const userForImageToDelete = await User.findById(req.user?._id).select(
     "-password"
   );
-  await oldImageDeleter(userForImageToDelete);
+  await oldAssetDeleter(userForImageToDelete?.avatar?.publicId);
   const avatarLocalPath = req.file?.path; //file because as single file is being uploaded
 
   if (!avatarLocalPath) {

@@ -24,4 +24,19 @@ const uploadOnCloudinary = async (localFilePath) => {
   }
 };
 
-export { uploadOnCloudinary };
+const oldAssetDeleter = async (publicId) => {
+  try {
+ 
+    if (publicId) {
+      const result = await cloudinary.uploader.destroy(publicId);
+      console.log("Image deletion result:", result);
+    } else {
+      console.log("No publicId found for the user avatar.");
+    }
+  } catch (error) {
+    console.error("Error deleting image:", error);
+  }
+};
+
+
+export { uploadOnCloudinary,oldAssetDeleter };

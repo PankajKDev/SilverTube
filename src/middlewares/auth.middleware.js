@@ -8,7 +8,7 @@ export const verifyJWT = asyncHandler(async (req, _, next) => {
     const token =
       req.cookies?.accessToken ||
       req.header("Authorization")?.replace("Bearer ", "");
-      console.log(req.cookies.accessToken)
+ 
     // In header method it looks for authorizaion header and Replace Bearer to empty to extract
     //the token
     //   if user is sending a header
